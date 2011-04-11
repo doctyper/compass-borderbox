@@ -27,7 +27,7 @@ And then import the mixins to your base SASS/SCSS file:
 Mixin
 ============
 
-#### borderbox($width [$height], $padding, [$border]);
+#### borderbox($width [$height], [$padding], [$border]);
 
 Sets box-sizing-compliant values, as well as legacy values for < IE 8
 

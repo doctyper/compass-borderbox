@@ -12,7 +12,7 @@
 // }
 $global-border-box: false !default;
 
-@mixin borderbox($dimensions, $padding, $border: false) {
+@mixin borderbox($dimensions, $padding: false, $border: false) {
 	@if not $global-border-box {
 		@include box-sizing(border-box);
 	}
@@ -23,6 +23,29 @@ $global-border-box: false !default;
 
 	@if length($dimensions) == 2 {
 		$height: nth($dimensions, 2);
+	}
+
+	// Extract padding values
+	$padding-length: length($padding);
+	$padding-y: 0;
+	$padding-x: 0;
+
+	@if $padding {
+		padding: $padding;
+
+		@if $padding-length == 4 {
+			$padding-y: nth($padding, 1) + nth($padding, 3);
+			$padding-x: nth($padding, 2) + nth($padding, 4);
+		} @else if $padding-length == 3 {
+			$padding-y: nth($padding, 1) + nth($padding, 3);
+			$padding-x: nth($padding, 2) * 2;
+		} @else if $padding-length == 2 {
+			$padding-y: nth($padding, 1) * 2;
+			$padding-x: nth($padding, 2) * 2;
+		} @else if $padding-length == 1 {
+			$padding-y: $padding * 2;
+			$padding-x: $padding * 2;
+		}
 	}
 
 	// Extract border values
@@ -40,31 +63,10 @@ $global-border-box: false !default;
 			$use-border-shorthand: true;
 		}
 	}
-
-	// Extract padding values
-	padding: $padding;
-
-	$padding-length: length($padding);
-	$padding-y: 0;
-	$padding-x: 0;
-
+	
 	$border-length: length($border-width);
 	$border-y: 0;
 	$border-x: 0;
-
-	@if $padding-length == 4 {
-		$padding-y: nth($padding, 1) + nth($padding, 3);
-		$padding-x: nth($padding, 2) + nth($padding, 4);
-	} @else if $padding-length == 3 {
-		$padding-y: nth($padding, 1) + nth($padding, 3);
-		$padding-x: nth($padding, 2) * 2;
-	} @else if $padding-length == 2 {
-		$padding-y: nth($padding, 1) * 2;
-		$padding-x: nth($padding, 2) * 2;
-	} @else if $padding-length == 1 {
-		$padding-y: $padding * 2;
-		$padding-x: $padding * 2;
-	}
 
 	@if $border {
 		@if $use-border-shorthand {
