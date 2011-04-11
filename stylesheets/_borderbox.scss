@@ -1,0 +1,12 @@
+// Borderbox ------------------------------------------------------------
+
+// Use box-sizing: border-box; with impunity
+// Borderbox outputs equivalent CSS in <IE8
+
+// Defaults ------------------------------------------------------------------
+
+// Set a global border-box property (default is false)
+$global-border-box: false !default;
+
+// Import --------------------------------------------------------------------
+@import "box-sizing/border-box";

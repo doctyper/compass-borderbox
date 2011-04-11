@@ -1,0 +1,114 @@
+// Borderbox mixin
+// Use box-sizing: border-box; with impunity
+// Borderbox outputs equivalent CSS in <IE8
+
+// Set to true if you prefer declaring a global box-sizing prop.
+//
+// Ex:
+// $global-border-box: true;
+// 
+// * {
+//     @include box-sizing(border-box);
+// }
+$global-border-box: false !default;
+
+@mixin borderbox($dimensions, $padding, $border: false) {
+	@if not $global-border-box {
+		@include box-sizing(border-box);
+	}
+
+	// Extract width/height values
+	$width: nth($dimensions, 1);
+	$height: false;
+
+	@if length($dimensions) == 2 {
+		$height: nth($dimensions, 2);
+	}
+
+	// Extract border values
+	$use-border-shorthand: false;
+	$border-width: false;
+
+	@each $unit in $border {
+		@if type-of($unit) == number {
+			@if $border-width {
+				$border-width: append($border-width, $unit);
+			} @else {
+				$border-width: $unit;
+			}
+		} @else {
+			$use-border-shorthand: true;
+		}
+	}
+
+	// Extract padding values
+	padding: $padding;
+
+	$padding-length: length($padding);
+	$padding-y: 0;
+	$padding-x: 0;
+
+	$border-length: length($border-width);
+	$border-y: 0;
+	$border-x: 0;
+
+	@if $padding-length == 4 {
+		$padding-y: nth($padding, 1) + nth($padding, 3);
+		$padding-x: nth($padding, 2) + nth($padding, 4);
+	} @else if $padding-length == 3 {
+		$padding-y: nth($padding, 1) + nth($padding, 3);
+		$padding-x: nth($padding, 2) * 2;
+	} @else if $padding-length == 2 {
+		$padding-y: nth($padding, 1) * 2;
+		$padding-x: nth($padding, 2) * 2;
+	} @else if $padding-length == 1 {
+		$padding-y: $padding * 2;
+		$padding-x: $padding * 2;
+	}
+
+	@if $border {
+		@if $use-border-shorthand {
+			border: $border;
+		} @else {
+			border-width: $border-width;
+		}
+		
+		@if $border-length == 4 {
+			$border-y: nth($border-width, 1) + nth($border-width, 3);
+			$border-x: nth($border-width, 2) + nth($border-width, 4);
+		} @else if $border-length == 3 {
+			$border-y: nth($border-width, 1) + nth($border-width, 3);
+			$border-x: nth($border-width, 2) * 2;
+		} @else if $border-length == 2 {
+			$border-y: nth($border-width, 1) * 2;
+			$border-x: nth($border-width, 2) * 2;
+		} @else if $border-length == 1 {
+			$border-y: $border-width * 2;
+			$border-x: $border-width * 2;
+		}
+	}
+
+	// Set width value
+	@if $width {
+		@if $width == auto {
+			width: $width;
+		} @else {
+			width: $width;
+			@if $legacy-support-for-ie {
+				*width: $width - $padding-x - $border-x;
+			}
+		}
+	}
+
+	// Set height value
+	@if $height {
+		@if $height == auto {
+			height: $height;
+		} @else {
+			height: $height;
+			@if $legacy-support-for-ie {
+				*height: $height - $padding-y - $border-y;
+			}
+		}
+	}
+}
